@@ -1,0 +1,35 @@
+version: "3.9"
+
+services:
+
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile.backend
+    container_name: youtube_rag_backend
+    ports:
+      - "5000:5000"
+    env_file:
+      - .env
+    restart: always
+    networks:
+      - rag_network
+
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile.frontend
+    container_name: youtube_rag_frontend
+    ports:
+      - "8501:8501"
+    env_file:
+      - .env
+    depends_on:
+      - backend
+    restart: always
+    networks:
+      - rag_network
+
+networks:
+  rag_network:
+    driver: bridge

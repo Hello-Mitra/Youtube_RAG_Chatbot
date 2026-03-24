@@ -1,0 +1,11 @@
+faiss-cpu
+fastapi
+langchain
+langchain-community
+langchain-core
+langchain-openai
+langchain-text-splitters
+streamlit
+tiktoken
+uvicorn
+youtube-transcript-api
