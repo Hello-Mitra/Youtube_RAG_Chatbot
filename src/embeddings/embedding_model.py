@@ -3,6 +3,9 @@ from langchain_openai import OpenAIEmbeddings
 from config.settings import settings
 from src.logger import logging
 from src.exception import MyException
+from dotenv import load_dotenv
+
+load_dotenv()
 
 
 class EmbeddingModel:

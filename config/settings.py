@@ -7,6 +7,8 @@ class Settings(BaseSettings):
     chunk_size: int = 1000
     chunk_overlap: int = 200
     top_k: int = 4
+    webshare_proxy_username: str = ""
+    webshare_proxy_password: str = ""
 
     class Config:
         env_file = ".env"
