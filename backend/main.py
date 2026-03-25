@@ -1,7 +1,10 @@
 import sys
+from dotenv import load_dotenv
 from fastapi import FastAPI
 from backend.routes.chat import router
 from src.logger import logging
+
+load_dotenv() 
 
 logging.info("Starting GenAI RAG API")
 
