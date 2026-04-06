@@ -17,7 +17,7 @@ class Retriever:
 
     def initiate_retriever(self) -> RetrieverArtifact:
         try:
-            logging.info(f"Building retriever")
+            logging.info("Building retriever")
             retriever = self.vector_store.as_retriever(
                 search_type=self.retriever_config.search_type,
                 search_kwargs={"k": self.retriever_config.top_k}
