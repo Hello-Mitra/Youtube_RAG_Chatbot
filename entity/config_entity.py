@@ -17,7 +17,7 @@ class EmbeddingModelConfig:
 
 @dataclass
 class VectorStoreConfig:
-    index_save_path: str = "artifacts/faiss_index"
+    index_save_path: str = settings.faiss_index_path
 
 @dataclass
 class RetrieverConfig:

@@ -31,6 +31,9 @@ def build_pipeline(video_id: str):
         logging.info(f"Pipeline built and cached for video_id: {video_id}")
         return retriever_artifact
 
+    except MyException as e:
+        logging.error(f"Unexpected error: {str(e)}")
+        raise HTTPException(status_code=500, detail=str(e))
     except Exception as e:
         raise MyException(e, sys)
 
@@ -55,7 +58,7 @@ def chat(request: QueryRequest):
         return {"answer": rag_chain_artifact.answer}
 
     except MyException as e:
-        logging.error(f"MyException occurred: {str(e)}")
+        logging.error(f"Unexpected error: {str(e)}")
         raise HTTPException(status_code=500, detail=str(e))
     except Exception as e:
         raise MyException(e, sys)

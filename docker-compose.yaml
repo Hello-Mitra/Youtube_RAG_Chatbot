@@ -1,3 +1,4 @@
+# docker-compose.yml
 version: "3.9"
 
 services:
@@ -11,7 +12,7 @@ services:
       - "5000:5000"
     env_file:
       - .env
-    restart: always
+    restart: unless-stopped
     networks:
       - rag_network
 
@@ -22,11 +23,12 @@ services:
     container_name: youtube_rag_frontend
     ports:
       - "8501:8501"
-    env_file:
-      - .env
+    environment:
+      - BACKEND_URL=http://backend:5000
     depends_on:
-      - backend
-    restart: always
+      backend:
+        condition: service_healthy
+    restart: unless-stopped
     networks:
       - rag_network
 

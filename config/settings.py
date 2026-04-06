@@ -9,6 +9,7 @@ class Settings(BaseSettings):
     top_k: int = 4
     webshare_proxy_username: str = ""
     webshare_proxy_password: str = ""
+    faiss_index_path: str = "artifacts/faiss_index"
 
     class Config:
         env_file = ".env"

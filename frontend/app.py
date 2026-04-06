@@ -6,7 +6,9 @@ import requests
 import streamlit as st
 from src.logger import logging
 
-st.title("🎥 YouTube RAG Chatbot")
+BACKEND_URL = os.getenv("BACKEND_URL", "http://localhost:5000")
+
+st.title("🎥 InsightStream — Extract insights from video content")
 st.markdown("Ask any question about a YouTube video!")
 
 video_id = st.text_input("Enter YouTube Video ID:", placeholder="e.g. Y0SbCp4fUvA")
@@ -21,7 +23,7 @@ if st.button("Ask"):
 
             with st.spinner("⏳ Fetching transcript and processing... this may take 1-3 minutes for the first question..."):
                 response = requests.post(
-                    "http://localhost:5000/api/chat",
+                    f"{BACKEND_URL}/api/chat",
                     json={"question": question, "video_id": video_id},
                     timeout=300
                 )

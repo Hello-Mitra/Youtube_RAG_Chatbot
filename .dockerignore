@@ -1,6 +1,13 @@
-logs
-.env
-.venv
 LICENSE
+insightstream-key.pem
 README.md
 test.txt
+.env
+.venv/
+__pycache__/
+*.pyc
+.git/
+logs/
+artifacts/
+.vscode/
+*.md
