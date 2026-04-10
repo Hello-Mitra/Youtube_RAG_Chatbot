@@ -107,8 +107,13 @@ class YoutubeLoader:
                 error_str = str(e)
                 if "429" in error_str or "Too Many Requests" in error_str:
                     wait_time = (2 ** attempt) + random.uniform(2, 5)
-                    logging.warning(f"Rate limited. Waiting {wait_time:.1f}s... next attempt will use cookies")
+                    logging.warning(f"Rate limited. Waiting {wait_time:.1f}s...")
                     time.sleep(wait_time)
+                elif "blocking requests" in error_str or "cloud provider" in error_str or "IPBlocked" in error_str or "RequestBlocked" in error_str:
+                    # ✅ YouTube IP block — try next attempt with cookies
+                    logging.warning(f"YouTube IP blocked on attempt {attempt + 1} — retrying with cookies")
+                    if attempt >= retries - 1:
+                        raise MyException(e, sys)
                 else:
                     raise MyException(e, sys)
 
