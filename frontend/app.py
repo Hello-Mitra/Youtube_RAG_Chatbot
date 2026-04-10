@@ -35,7 +35,12 @@ if st.button("Ask"):
                 st.info("💡 Tip: Follow-up questions on the same video will be much faster!")
             else:
                 logging.error(f"Backend returned error: {response.status_code}")
-                st.error(f"Something went wrong: {response.json().get('detail', 'Unknown error')}")
+                # ✅ Safe JSON parsing — handles empty or non-JSON responses
+                try:
+                    detail = response.json().get("detail", "Unknown error")
+                except Exception:
+                    detail = response.text or f"HTTP {response.status_code} error"
+                st.error(f"Something went wrong: {detail}")
 
         except requests.exceptions.Timeout:
             logging.error("Request timed out")
@@ -45,4 +50,15 @@ if st.button("Ask"):
             st.error("🔌 Could not connect to backend. Make sure the backend is running.")
         except Exception as e:
             logging.error(f"Unexpected error: {str(e)}")
-            st.error(f"Unexpected error occurred: {str(e)}")
+            # ✅ Show actual error message not just str(e) which causes JSONDecodeError confusion
+            error_msg = str(e)
+            if "Expecting value" in error_msg:
+                st.error("❌ Backend returned an empty response. The request may have timed out or the video transcript could not be fetched.")
+            elif "rate" in error_msg.lower() or "429" in error_msg:
+                st.error("⏳ YouTube is rate limiting requests. Please wait a few minutes and try again.")
+            elif "TranscriptsDisabled" in error_msg:
+                st.error("❌ Transcripts are disabled for this video. Please try a different video.")
+            elif "NoTranscriptFound" in error_msg:
+                st.error("❌ No transcript found for this video. Please try a video with captions enabled.")
+            else:
+                st.error(f"❌ Unexpected error: {error_msg}")

@@ -43,11 +43,7 @@ def chat(request: QueryRequest):
         logging.info(f"Received request - video_id: {request.video_id}, question: {request.question}")
 
         pipeline = RAGPipeline()
-
-        # fetch retriever from cache
         retriever_artifact = build_pipeline(request.video_id)
-
-        # only rag_chain runs every time
         rag_chain_artifact = pipeline.start_rag_chain(
             retriever_artifact=retriever_artifact,
             question=request.question,
@@ -57,8 +53,8 @@ def chat(request: QueryRequest):
         logging.info("Request processed successfully")
         return {"answer": rag_chain_artifact.answer}
 
-    except MyException as e:
-        logging.error(f"Unexpected error: {str(e)}")
-        raise HTTPException(status_code=500, detail=str(e))
+    except HTTPException:
+        raise  # ✅ re-raise FastAPI exceptions as-is
     except Exception as e:
-        raise MyException(e, sys)
+        logging.error(f"Chat error: {str(e)}")
+        raise HTTPException(status_code=500, detail=str(MyException(e, sys)))  # ✅ always return proper JSON
